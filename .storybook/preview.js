@@ -1,3 +1,6 @@
+import { withThemeFromJSXProvider } from "@storybook/addon-styling";
+import { createGlobalStyle } from "styled-components";
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -7,3 +10,16 @@ export const parameters = {
     },
   },
 };
+
+const GlobalStyles = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+  body {
+    font-family: 'Roboto', sans-serif;
+  }
+`;
+
+export const decorators = [
+  withThemeFromJSXProvider({
+    GlobalStyles,
+  }),
+];
