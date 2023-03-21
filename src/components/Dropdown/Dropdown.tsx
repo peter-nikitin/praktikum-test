@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Toggle } from "./components/Toggle/Toggle";
 import { Menu } from "./components/Menu/Menu";
 import { MenuItem } from "./components/MenuItem/MenuItem";
@@ -10,6 +10,7 @@ import { DropdownProps, DropdownSubComponents } from "./types";
 import { usePopper } from "react-popper";
 import flip from "@popperjs/core/lib/modifiers/flip.js";
 import { useOnClickOutside } from "../../hooks/useOnClickOutside";
+import { useIntersection } from "../../hooks/useIntersection";
 
 declare global {
   interface Window {
@@ -17,8 +18,11 @@ declare global {
   }
 }
 
+export type DropdownMenuStateType = "closed" | "opened" | "hidden";
+
 export const DropdownWrapper: FC<DropdownProps> = ({ children, placement }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [dropdownMenuState, setDropdownMenuState] =
+    useState<DropdownMenuStateType>("closed");
 
   const [toggleElementRef, setToggleElementRef] = useState<Element | null>(
     null
@@ -48,20 +52,25 @@ export const DropdownWrapper: FC<DropdownProps> = ({ children, placement }) => {
   });
 
   const handleDropdownToggle = useCallback(() => {
-    setIsOpen((prevState) => !prevState);
-  }, [setIsOpen]);
+    setDropdownMenuState((prevState) => {
+      if (prevState === "hidden" || prevState === "opened") {
+        return "closed";
+      }
+      return "opened";
+    });
+  }, [setDropdownMenuState]);
 
   const dropdownContextValue: DropdownContextValueType = useMemo(
     () => ({
-      isOpen,
+      dropdownMenuState,
       toggle: handleDropdownToggle,
       setMenuElementRef,
       setToggleElementRef,
       placement: { styles, attributes },
     }),
     [
-      isOpen,
-      setIsOpen,
+      dropdownMenuState,
+      setDropdownMenuState,
       setToggleElementRef,
       setMenuElementRef,
       handleDropdownToggle,
@@ -71,8 +80,21 @@ export const DropdownWrapper: FC<DropdownProps> = ({ children, placement }) => {
   );
 
   useOnClickOutside([toggleElementRef, menuElementRef], () => {
-    setIsOpen(false);
+    setDropdownMenuState("closed");
   });
+
+  const { isVisible } = useIntersection({ observingElement: toggleElementRef });
+
+  useEffect(() => {
+    if (!isVisible && dropdownMenuState === "opened") {
+      setDropdownMenuState("hidden");
+      return;
+    }
+
+    if (isVisible && dropdownMenuState === "hidden") {
+      setDropdownMenuState("opened");
+    }
+  }, [setDropdownMenuState, dropdownMenuState, isVisible]);
 
   return (
     <DropdownContext.Provider value={dropdownContextValue}>
