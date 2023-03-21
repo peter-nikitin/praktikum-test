@@ -2,7 +2,7 @@ import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Dropdown } from "../components/Dropdown/Dropdown";
 import { Edit, MoreVertical } from "react-feather";
-import { FONT, SPACING } from "../theme";
+import { COLOR, FONT, SIZE, SPACING } from "../theme";
 import styled from "styled-components";
 
 export default {
@@ -34,6 +34,27 @@ const BottomRight = styled.div`
   right: ${SPACING.M};
 `;
 
+const ToggleButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: none;
+  background-color: ${COLOR.ACCENT.BACKGROUND.basic};
+  padding: ${SPACING.XS} ${SPACING.XS};
+  cursor: pointer;
+  border-radius: ${SIZE.BORDER_DARIUS};
+  color: ${COLOR.ACCENT.COLOR.basic};
+  font-size: ${FONT.SIZE.M};
+
+  &:hover {
+    background-color: ${COLOR.ACCENT.BACKGROUND.hover};
+  }
+
+  &:active {
+    background-color: ${COLOR.ACCENT.BACKGROUND.active};
+  }
+`;
+
 const menuItems = [
   {
     text: "My text",
@@ -56,7 +77,10 @@ const Wrapper = styled.div`
 const DropdownExample = () => (
   <Dropdown>
     <Dropdown.Toggle>
-      <MoreVertical size={FONT.SIZE.L} />
+      <ToggleButton>
+        {" "}
+        <MoreVertical size={FONT.SIZE.L} />
+      </ToggleButton>
     </Dropdown.Toggle>
     <Dropdown.Menu>
       {menuItems.map((item) => (
