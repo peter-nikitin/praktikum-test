@@ -9,12 +9,13 @@ export type MenuProps = {
 };
 
 export const Menu: FC<MenuProps> = ({ children }) => {
-  const { isOpen, setMenuElementRef, placement } = useDropdownContext();
+  const { dropdownMenuState, setMenuElementRef, placement } =
+    useDropdownContext();
   const portalContainer = usePortalContainer();
 
   return (
     <>
-      {isOpen &&
+      {dropdownMenuState === "opened" &&
         createPortal(
           <MenuWrapper
             ref={setMenuElementRef}

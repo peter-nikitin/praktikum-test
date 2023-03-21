@@ -49,6 +49,10 @@ const menuItems = [
   },
 ];
 
+const Wrapper = styled.div`
+  height: 200vh;
+`;
+
 const DropdownExample = () => (
   <Dropdown>
     <Dropdown.Toggle>
@@ -70,7 +74,7 @@ const DropdownExample = () => (
 );
 
 const Template: ComponentStory<typeof Dropdown> = (args) => (
-  <>
+  <Wrapper>
     <TopLeft>
       <DropdownExample />
     </TopLeft>
@@ -83,7 +87,7 @@ const Template: ComponentStory<typeof Dropdown> = (args) => (
     <BottomRight>
       <DropdownExample />
     </BottomRight>
-  </>
+  </Wrapper>
 );
 
 export const Default = Template.bind({});

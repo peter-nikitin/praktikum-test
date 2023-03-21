@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+import { DropdownMenuStateType } from "../Dropdown";
 
 type Placement = {
   styles: Record<string, React.CSSProperties>;
@@ -6,7 +7,7 @@ type Placement = {
 };
 
 export type DropdownContextValueType = {
-  isOpen: boolean;
+  dropdownMenuState: DropdownMenuStateType;
   toggle: () => void;
   setToggleElementRef?: (element: Element | null) => void;
   setMenuElementRef?: (element: HTMLElement | null) => void;
@@ -14,9 +15,9 @@ export type DropdownContextValueType = {
 };
 
 export const dropdownContextValue = {
-  isOpen: false,
+  dropdownMenuState: "closed",
   toggle: () => {},
-};
+} as const;
 
 export const DropdownContext =
   createContext<DropdownContextValueType>(dropdownContextValue);

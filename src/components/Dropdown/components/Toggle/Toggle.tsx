@@ -8,6 +8,7 @@ export type ToggleProps = {
 
 export const Toggle: FC<ToggleProps> = ({ children }) => {
   const { toggle, setToggleElementRef } = useDropdownContext();
+
   return (
     <ToggleWrapper onClick={toggle} ref={setToggleElementRef}>
       {children}
